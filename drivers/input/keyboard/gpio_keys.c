@@ -514,29 +514,6 @@ static void gpio_keys_report_event(struct gpio_button_data *bdata)
 	}
 #endif
 
-	//mdnie negative effect toggle by gm
-	if((button->code == HOME_KEY_VAL) && mdnie_shortcut_enabled)
-	{
-		if(state) {
-			if (  get_time_inms() - homekey_lasttime < homekey_trg_ms) {
-				homekey_count++;
-				printk(KERN_INFO "repeated home_key action %d.\n", homekey_count);
-			}
-			else
-			{
-				homekey_count = 0;
-			}
-		}
-		else {
-			if(homekey_count>=homekey_trg_cnt - 1)
-			{
-				mdnie_toggle_negative();
-				homekey_count = 0;
-			}
-			homekey_lasttime = get_time_inms();
-		}
-	}
-
 	if (type == EV_ABS) {
 		if (state) {
 			input_event(input, type, button->code, button->value);

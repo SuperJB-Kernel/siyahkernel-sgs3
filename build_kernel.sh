@@ -3,7 +3,10 @@ export KERNELDIR=`readlink -f .`
 export RAMFS_SOURCE=`readlink -f $KERNELDIR/../ramfs-sgs3`
 export PARENT_DIR=`readlink -f ..`
 export USE_SEC_FIPS_MODE=true
-CROSS_COMPILE=$PARENT_DIR/android_prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
+#CROSS_COMPILE=$PARENT_DIR/android_prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
+#CROSS_COMPILE=/home/superatmel/SUPEROSR/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
+CROSS_COMPILE=../../../prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
+CROSS_COMPILE_STRIP=../../../prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-strip
 
 if [ "${1}" != "" ];then
   export KERNELDIR=`readlink -f ${1}`
@@ -40,7 +43,8 @@ rm -rf $RAMFS_TMP/.hg
 mkdir -p $INITRAMFS/lib/modules
 mv -f drivers/media/video/samsung/mali_r3p0_lsi/mali.ko drivers/media/video/samsung/mali_r3p0_lsi/mali_r3p0_lsi.ko
 find -name '*.ko' -exec cp -av {} $RAMFS_TMP/lib/modules/ \;
-/opt/toolchains/arm-eabi-4.4.3/bin/arm-eabi-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
+#/opt/toolchains/arm-eabi-4.4.3/bin/arm-eabi-strip --strip-unneeded $RAMFS_TMP/lib/modules/*
+$CROSS_COMPILE_STRIP --strip-unneeded $RAMFS_TMP/lib/modules/*
 
 cd $RAMFS_TMP
 find | fakeroot cpio -H newc -o > $RAMFS_TMP.cpio 2>/dev/null
